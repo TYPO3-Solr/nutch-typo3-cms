@@ -30,7 +30,7 @@ The plug-ins provide the following features for use with Apache Solr for TYPO3:
 - Indexing of the SiteHash field 
 - Indexing of the uid field
 
-# Systems requirements (will change soon)
+## Systems requirements (will change soon)
 
 - TYPO3 CMS 4.5 
 - EXT:solr Version 2.8.3
