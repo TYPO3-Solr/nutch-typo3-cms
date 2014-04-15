@@ -87,3 +87,7 @@ The distribution includes the following changes:
 NUTCH-585: Allows to exclude certain parts of a HTML page from being indexed. 
 nutch-585-excludeNodes.patch – 2011-09-18
 
+## Authors
+
+## License
+
