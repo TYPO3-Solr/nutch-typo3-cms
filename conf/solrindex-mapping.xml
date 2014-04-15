@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping>
+	<!--
+		Simple mapping of fields created by Nutch IndexingFilters to fields
+		defined (and expected) in TYPO3's Solr schema.xml.
+
+		Any fields in NutchDocument that match a name defined in
+		field/@source will be renamed to the corresponding field/@dest.
+
+		Additionally, if a field name (before mapping) matches a
+		copyField/@source then its values will be copied to the corresponding
+		copyField/@dest field.
+
+		uniqueKey has the same meaning as in Solr schema.xml, and defaults to "id" if not defined.
+	-->
+	<fields>
+		<field source="appKey"   dest="appKey" />
+		<field source="access"   dest="access" />
+		<field source="content"  dest="content" />
+		<field source="endtime"  dest="endtime" />
+		<field source="keywords" dest="keywords" />
+		<field source="site"     dest="site" />
+		<field source="title"    dest="title" />
+		<field source="tstamp"   dest="changed" />
+		<field source="tstamp"   dest="created" />
+		<field source="siteHash" dest="siteHash" />
+		<field source="uid"      dest="uid" />
+		<field source="type"     dest="type" />
+		
+		<field source="site" dest="nutchSite_stringS" />
+		<field source="host" dest="nutchHost_stringS" />
+	</fields>
+	<uniqueKey>id</uniqueKey>
+</mapping>

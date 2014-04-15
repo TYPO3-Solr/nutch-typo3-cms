@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+	id="typo3-endtime"
+	name="Apache Nutch for TYPO3 - endtime Indexing Filter"
+	version="1.0.0">
+
+
+	<runtime>
+		<library name="typo3-endtime.jar">
+			<export name="*"/>
+		</library>
+	</runtime>
+
+	<requires>
+		<import plugin="nutch-extensionpoints"/>
+	</requires>
+
+	<extension 
+			id="org.typo3.nutch.indexer.endtime"
+			name="edntime Indexing Filter"
+			point="org.apache.nutch.indexer.IndexingFilter">
+		<implementation 
+				id="EndtimeIndexingFilter"
+				class="org.typo3.nutch.indexer.endtime.EndtimeIndexingFilter"/>
+	</extension>
+
+</plugin>

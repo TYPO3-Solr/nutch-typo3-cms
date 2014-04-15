@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<ivy-module version="1.0">
+  <info organisation="org.typo3" module="typo3-nutch">
+    <license name="Apache 2.0" url="http://www.apache.org/licenses/LICENSE-2.0.txt"/>
+    <ivyauthor name="Ingo Renner"/>
+    <description homepage="http://www.typo3-solr.com">
+        Apache Nutch for TYPO3
+
+        Adds a endtime value for the Solr documents.
+    </description>
+  </info>
+
+  <configurations>
+    <include file="${nutch.root}/ivy/ivy-configurations.xml"/>
+  </configurations>
+
+  <publications>
+    <!--get the artifact from our module name-->
+    <artifact conf="master"/>
+  </publications>
+
+</ivy-module>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+	id="typo3-uid"
+	name="Apache Nutch for TYPO3 - UID Indexing Filter"
+	version="2.0.0">
+
+
+	<runtime>
+		<library name="typo3-uid.jar">
+			<export name="*"/>
+		</library>
+	</runtime>
+
+	<requires>
+		<import plugin="nutch-extensionpoints"/>
+	</requires>
+
+	<extension 
+			id="org.typo3.nutch.indexer.uid"
+			name="UID Indexing Filter"
+			point="org.apache.nutch.indexer.IndexingFilter">
+		<implementation 
+				id="Typo3UidIndexingFilter"
+				class="org.typo3.nutch.indexer.uid.UidIndexingFilter"/>
+	</extension>
+
+</plugin>

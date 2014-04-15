@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>http.agent.name</name>
+    <value>ApacheNutchForTypo3</value>
+    <description>
+      HTTP 'User-Agent' request header. MUST NOT be empty -
+      please set this to a single word uniquely related to your organization.
+    </description>
+  </property>
+
+  <property>
+    <name>plugin.includes</name>
+    <value>protocol-http|urlfilter-regex|parse-(html|tika)|index-(basic|anchor|static)|scoring-opic|urlnormalizer-(pass|regex|basic)|language-identifier|urlmeta|typo3-(accessrootline|base|index-keywords|parse-keywords|sitehash|uid)</value>
+    <description>
+      Regular expression naming plugin directory names to
+      include.  Any plugin not matching this expression is excluded.
+      In any case you need at least include the nutch-extensionpoints plugin. By
+      default Nutch includes crawling just HTML and plain text via HTTP,
+      and basic indexing and search plugins. In order to use HTTPS please enable
+      protocol-httpclient, but be aware of possible intermittent problems with the
+      underlying commons-httpclient library.
+    </description>
+  </property>
+
+  <property>
+    <name>db.ignore.external.links</name>
+    <value>true</value>
+    <description>
+      If true, outlinks leading from a page to external hosts
+      will be ignored. This is an effective way to limit the crawl to include
+      only initially injected hosts, without creating complex URLFilters.
+  </description>
+  </property>
+
+  <property>
+    <name>typo3.baseUrl</name>
+    <value>http://www.example.com</value>
+    <description>
+      URL to the website with the TYPO3 installation
+    </description>
+  </property>
+
+  <property>
+    <name>typo3.api.key</name>
+    <value></value>
+    <description>
+      Api Key for the SiteHash Api.
+      Can be found in your TYPO3 installation backend in the Search Module at the bottom.
+    </description>
+  </property>
+
+  <property>
+    <name>typo3.access.rootline</name>
+    <value>c:0</value>
+    <description>
+      Access Rootline to be indexed for the crawled pages.
+    </description>
+  </property>
+
+  <!-- optional HTML Parser properties -->
+  <!-- Added by NUTCH-585 https://issues.apache.org/jira/secure/attachment/12494949/nutch-585-excludeNodes.patch -->
+  <property>
+    <name>parser.html.NodesToExclude</name>
+    <value></value>
+    <description>
+      A list of nodes whose content will not be indexed separated by "|". 
+      Use this to tell the HTML parser to ignore, for example, site navigation text.
+
+      Each node has three elements, separated by semi-colon: 
+      the first one is the tag name, 
+      the second one the attribute name, 
+      the third one the value of the attribute.
+
+      Example: table;summary;header|div;id;navigation
+
+      Note that nodes with these attributes, and their children, will be 
+      silently ignored by the parser so verify the indexed content 
+      with Luke to confirm results.
+    </description>
+  </property>
+
+</configuration>

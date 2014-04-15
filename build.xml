@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<project name="${name}" default="dist">
+
+	<property file="${basedir}/default.properties" />
+
+	<!--	
+		Targets named nutch-* simply call Nutch's own ant targets
+
+		- package workflow -
+		* init
+		* compile
+			* compile-nutch-checkout
+			* compile-patch-nutch
+			* nutch-compile
+			* compile-typo3-plugins
+		* dist
+			* nutch-package-bin
+			* dist-tar-bin
+
+	-->
+
+
+	<!-- ====================================================== -->
+	<!-- Stuff needed by all targets                            -->
+	<!-- ====================================================== -->
+	<target name="init">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.nutch}"/>
+		<mkdir dir="${build.dist}"/>
+	</target>
+
+
+	<!-- ====================================================== -->
+	<!-- Building Nutch                                         -->
+	<!-- ====================================================== -->
+	<target name="compile" 
+		depends="nutch-compile, compile-typo3-plugins" 
+		description="--> build Nutch" 
+	/>
+
+	<target name="nutch-compile" depends="init, compile-checkout-src, compile-patch-nutch">
+		<ant dir="${build.nutch}" inheritAll="false"/>
+	</target>
+
+	<target name="compile-checkout-src" depends="init">
+		<exec executable="svn">
+			<arg value="checkout"/>
+			<arg value="${nutch.scmsrc}/tags/release-${nutch.version}"/>
+			<arg value="${build.nutch}"/>
+		</exec>
+	</target>
+
+	<target name="compile-patch-nutch" depends="init, compile-checkout-src">
+		<patch 
+			patchfile="${basedir}/patches/nutch-585-excludeNodes.patch"
+			dir="${build.nutch}"
+			strip="0"
+			failonerror="true"
+		/>
+	</target>
+
+	<target name="compile-typo3-plugins" depends="nutch-compile">
+		<copy todir="${build.nutch}/src/plugin">
+			<fileset dir="${plugins.dir}"/>
+		</copy>
+
+		<ant dir="${build.nutch.src.plugin}/typo3-accessrootline" target="deploy" inheritAll="false"/>
+		<ant dir="${build.nutch.src.plugin}/typo3-base" target="deploy" inheritAll="false"/>
+		<ant dir="${build.nutch.src.plugin}/typo3-endtime" target="deploy" inheritAll="false"/>
+		<ant dir="${build.nutch.src.plugin}/typo3-index-keywords" target="deploy" inheritAll="false"/>
+		<ant dir="${build.nutch.src.plugin}/typo3-parse-keywords" target="deploy" inheritAll="false"/>
+		<ant dir="${build.nutch.src.plugin}/typo3-sitehash" target="deploy" inheritAll="false"/>
+		<ant dir="${build.nutch.src.plugin}/typo3-uid" target="deploy" inheritAll="false"/>
+	</target>
+
+
+	<!-- ====================================================== -->
+	<!-- Building a distributable file                          -->
+	<!-- ====================================================== -->
+	<target name="dist" depends="nutch-package-bin, dist-copy-configuration, dist-create-configuration, dist-tar-bin" description="--> build the distributable zip file" />
+
+	<target name="nutch-package-bin" depends="compile">
+		<ant dir="${build.nutch}" target="package-bin" inheritAll="false"/>
+	</target>
+
+	<target name="dist-copy-configuration" depends="init">
+		<copy 
+			todir="${build.nutch}/dist/apache-nutch-${nutch.version}-bin/conf"
+			file="${basedir}/conf/nutch-site.xml"
+			overwrite="true"
+		/>
+		<copy 
+			todir="${build.nutch}/dist/apache-nutch-${nutch.version}-bin/conf"
+			file="${basedir}/conf/solrindex-mapping.xml"
+			overwrite="true"
+		/>
+		<concat destfile="${build.nutch}/dist/apache-nutch-${nutch.version}-bin/conf/log4j.properties" append="true">
+			<fileset file="${basedir}/conf/log4j.properties" />
+		</concat>
+	</target>
+
+	<!-- depends="nutch-package-bin" -->
+	<target name="dist-create-configuration" depends="init">
+		<mkdir dir="${build.nutch}/dist/apache-nutch-${nutch.version}-bin/urls"/>
+		<touch file="${build.nutch}/dist/apache-nutch-${nutch.version}-bin/urls/seed.txt"/>
+	</target>
+
+	<target name="dist-tar-bin" >
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${build.nutch}/dist/apache-nutch-${nutch.version}-bin/docs" />
+		</delete>
+
+		<tar 
+			destfile="${build.dist}/${final.name}.tar.gz"
+			compression="gzip" longfile="gnu" >
+
+			<tarfileset dir="${build.nutch}/dist/apache-nutch-${nutch.version}-bin" mode="664">
+				<exclude name="bin/*" />
+				<include name="**" />
+			</tarfileset>
+			<tarfileset dir="${build.nutch}/dist/apache-nutch-${nutch.version}-bin" mode="755">
+				<include name="bin/*" />
+				<include name="crawl.sh" />
+			</tarfileset>
+		</tar>
+	</target>
+
+	
+	<!-- ================================================================== -->
+	<!-- Clean.  Delete the build files, and their directories              -->
+	<!-- ================================================================== -->
+	<target name="clean" description="--> clean the project">
+		<delete includeemptydirs="true" dir="${build.dir}"/>
+	</target>
+
+	<target name="clean-nutch" description="--> clean Nutch">
+		<ant dir="${build.nutch}" target="clean" inheritAll="false"/>
+
+		<delete includeemptydirs="true">
+			<fileset dir="${build.nutch}/src/plugin" includes="typo3-*/"/>
+		</delete>
+	</target>
+
+</project>

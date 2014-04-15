@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+	id="typo3-base"
+	name="Apache Nutch for TYPO3 - Base Fields Indexing Filter"
+	version="2.0.0">
+
+
+	<runtime>
+		<library name="typo3-base.jar">
+			<export name="*"/>
+		</library>
+	</runtime>
+
+	<requires>
+		<import plugin="nutch-extensionpoints"/>
+	</requires>
+
+	<extension 
+			id="org.typo3.nutch.indexer.base"
+			name="Base Fields Indexing Filter"
+			point="org.apache.nutch.indexer.IndexingFilter">
+		<implementation 
+				id="Typo3BaseIndexingFilter"
+				class="org.typo3.nutch.indexer.base.BaseIndexingFilter"/>
+	</extension>
+
+</plugin>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+	id="typo3-index-keywords"
+	name="Apache Nutch for TYPO3 - Keywords Indexing Filter"
+	version="2.0.0">
+
+
+	<runtime>
+		<library name="typo3-index-keywords.jar">
+			<export name="*"/>
+		</library>
+	</runtime>
+
+	<requires>
+		<import plugin="nutch-extensionpoints"/>
+	</requires>
+
+	<extension 
+			id="org.typo3.nutch.indexer.keywords"
+			name="Keywords Indexing Filter"
+			point="org.apache.nutch.indexer.IndexingFilter">
+		<implementation 
+				id="Typo3KeywordsIndexingFilter"
+				class="org.typo3.nutch.indexer.keywords.KeywordsIndexingFilter"/>
+	</extension>
+
+</plugin>

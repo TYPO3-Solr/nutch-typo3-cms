@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+	id="typo3-parse-keywords"
+	name="Apache Nutch for TYPO3 - Keywords Parse Plug-In"
+	version="2.0.0">
+
+
+	<runtime>
+		<library name="typo3-parse-keywords.jar">
+			<export name="*"/>
+		</library>
+	</runtime>
+
+	<requires>
+		<import plugin="nutch-extensionpoints"/>
+	</requires>
+
+	<extension 
+			id="org.typo3.nutch.parse.keywords"
+			name="KeywordsParser"
+			point="org.apache.nutch.parse.HtmlParseFilter">
+		<implementation 
+				id="Typo3KeywordsParser"
+				class="org.typo3.nutch.parse.keywords.KeywordsParser"/>
+	</extension>
+
+</plugin>

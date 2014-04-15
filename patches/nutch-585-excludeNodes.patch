@@ -1,0 +1,181 @@
+Index: conf/nutch-default.xml
+===================================================================
+--- conf/nutch-default.xml	(Revision 1380217)
++++ conf/nutch-default.xml	(Arbeitskopie)
+@@ -1047,7 +1047,29 @@
+   </description>
+ </property>
+ 
++<!-- optional HTML Parser properties -->
++<!-- Added by NUTCH-585 https://issues.apache.org/jira/secure/attachment/12494949/nutch-585-excludeNodes.patch -->
+ <property>
++  <name>parser.html.NodesToExclude</name>
++  <value></value>
++  <description>
++  A list of nodes whose content will not be indexed separated by "|". 
++  Use this to tell the HTML parser to ignore, for example, site navigation text.
++
++  Each node has three elements, separated by semi-colon: 
++    the first one is the tag name, 
++    the second one the attribute name, 
++    the third one the value of the attribute.
++
++  Example: table;summary;header|div;id;navigation
++
++  Note that nodes with these attributes, and their children, will be 
++  silently ignored by the parser so verify the indexed content 
++  with Luke to confirm results.
++  </description>
++</property>
++
++<property>
+   <name>parser.html.form.use_action</name>
+   <value>false</value>
+   <description>If true, HTML parser will collect URLs from form action
+Index: src/plugin/parse-html/src/java/org/apache/nutch/parse/html/HtmlParser.java
+===================================================================
+--- src/plugin/parse-html/src/java/org/apache/nutch/parse/html/HtmlParser.java	(Revision 1380217)
++++ src/plugin/parse-html/src/java/org/apache/nutch/parse/html/HtmlParser.java	(Arbeitskopie)
+@@ -18,6 +18,7 @@
+ package org.apache.nutch.parse.html;
+ 
+ import java.util.ArrayList;
++import java.util.StringTokenizer;
+ import java.util.Map;
+ import java.net.URL;
+ import java.net.MalformedURLException;
+@@ -112,7 +113,15 @@
+   private HtmlParseFilters htmlParseFilters;
+   
+   private String cachingPolicy;
+-  
++
++  // The list of node to be excluded.
++  // Each array has 3 position:
++  // 1st: tag name
++  // 2nd: attribute name
++  // 3rd: attribute value
++  private String [][] nodesToExclude;
++
++  @Override
+   public ParseResult getParse(Content content) {
+     HTMLMetaTags metaTags = new HTMLMetaTags();
+ 
+@@ -161,6 +170,23 @@
+     if (LOG.isTraceEnabled()) {
+       LOG.trace("Meta tags for " + base + ": " + metaTags.toString());
+     }
++
++    if (!metaTags.getNoFollow()) {              // okay to follow links
++      ArrayList<Outlink> l = new ArrayList<Outlink>();   // extract outlinks
++      URL baseTag = utils.getBase(root);
++      if (LOG.isTraceEnabled()) { LOG.trace("Getting links..."); }
++      utils.getOutlinks(baseTag!=null?baseTag:base, l, root);
++      outlinks = l.toArray(new Outlink[l.size()]);
++      if (LOG.isTraceEnabled()) {
++        LOG.trace("found "+outlinks.length+" outlinks in "+content.getUrl());
++      }
++    }
++
++	if ((this.nodesToExclude != null) && (this.nodesToExclude.length > 0)) {
++	  LOG.info("Excluding Nodes...");
++	  excludeNode(root);
++	}
++
+     // check meta directives
+     if (!metaTags.getNoIndex()) {               // okay to index
+       StringBuffer sb = new StringBuffer();
+@@ -172,18 +198,7 @@
+       utils.getTitle(sb, root);         // extract title
+       title = sb.toString().trim();
+     }
+-      
+-    if (!metaTags.getNoFollow()) {              // okay to follow links
+-      ArrayList<Outlink> l = new ArrayList<Outlink>();   // extract outlinks
+-      URL baseTag = utils.getBase(root);
+-      if (LOG.isTraceEnabled()) { LOG.trace("Getting links..."); }
+-      utils.getOutlinks(baseTag!=null?baseTag:base, l, root);
+-      outlinks = l.toArray(new Outlink[l.size()]);
+-      if (LOG.isTraceEnabled()) {
+-        LOG.trace("found "+outlinks.length+" outlinks in "+content.getUrl());
+-      }
+-    }
+-    
++
+     ParseStatus status = new ParseStatus(ParseStatus.SUCCESS);
+     if (metaTags.getRefresh()) {
+       status.setMinorCode(ParseStatus.SUCCESS_REDIRECT);
+@@ -206,6 +221,51 @@
+     return filteredParse;
+   }
+ 
++  protected void excludeNode(Node pNode) {
++		// do we need to strip this node itself?
++		boolean wasStripped = false;
++
++		for (int i = 0; i < this.nodesToExclude.length; ++i) {
++			if (this.nodesToExclude[i][0].equalsIgnoreCase(pNode.getNodeName())
++					&& pNode.hasAttributes()) {
++
++				Node idNode = pNode.getAttributes().getNamedItem(
++						this.nodesToExclude[i][1]);
++				String idValue = (idNode != null) ? idNode.getNodeValue()
++						: null;
++				if (idValue != null) {
++					if (idValue.equalsIgnoreCase(this.nodesToExclude[i][2])) {
++
++						// can't remove this node, but we can strip it
++						if (LOG.isTraceEnabled())
++							LOG.trace("Stripping " + pNode.getNodeName() + "#"
++									+ idNode.getNodeValue());
++						pNode.setNodeValue("");
++
++						// remove all children for this node
++						while (pNode.hasChildNodes())
++							pNode.removeChild(pNode.getFirstChild());
++
++						wasStripped = true;
++						break;
++					}
++				}
++			}
++		}
++
++		if (!wasStripped) {
++			// now process the children recursively
++			NodeList children = pNode.getChildNodes();
++			if (children != null) {
++
++				int len = children.getLength();
++				for (int i = 0; i < len; i++) {
++					excludeNode(children.item(i));
++				}
++			}
++		}
++	}
++
+   private DocumentFragment parse(InputSource input) throws Exception {
+     if (parserImpl.equalsIgnoreCase("tagsoup"))
+       return parseTagSoup(input);
+@@ -293,6 +353,21 @@
+     this.utils = new DOMContentUtils(conf);
+     this.cachingPolicy = getConf().get("parser.caching.forbidden.policy",
+         Nutch.CACHING_FORBIDDEN_CONTENT);
++
++    this.nodesToExclude = null;
++    String divsToExclude = getConf().get("parser.html.NodesToExclude", null);
++    if ((divsToExclude != null) && (divsToExclude.trim().length() > 0)) {
++
++    		LOG.warn("Configured using [parser.html.NodesToExclude] to ignore DIVs with IDs [" + divsToExclude + "]...");
++    		StringTokenizer st = new StringTokenizer(divsToExclude , "|");
++    		this.nodesToExclude = new String[st.countTokens()][];
++    		int i = 0;
++    		while ( st.hasMoreTokens() )
++    		{
++    			this.nodesToExclude[i] = st.nextToken().split(";");
++    			i++;
++    		}
++  	}
+   }
+ 
+   public Configuration getConf() {
