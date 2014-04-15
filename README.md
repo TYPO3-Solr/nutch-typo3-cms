@@ -94,6 +94,7 @@ nutch-585-excludeNodes.patch – 2011-09-18
 ## Authors
 
 Ingo Renner 
+
 Phuong Doan 
 
 ## License
