@@ -52,9 +52,13 @@ Use the following command to run Nutch:
 bin/nutch crawl urls -solr <Solr URL> -dir crawl -depth <Indexing depth> -topN <Number of pages per level>
 
 The place holders must be replaced by values fitting your environment of course.
+
 -solr points to your Solr server (f.e. Http://localhost:8080/solr/core_en)
+
 -dir dir names the directory to put the crawl in.
+
 -depth depth indicates the link depth from the root page that should be crawled.
+
 -topN N determines the maximum number of pages that will be retrieved at each level up to the depth.
 
 Also, for more parameters see http://wiki.apache.org/nutch/bin/nutch_crawl 
