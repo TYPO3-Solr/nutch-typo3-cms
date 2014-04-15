@@ -47,7 +47,7 @@ http://www.typo3-solr.com/en/solr-for-typo3/add-ons/apache-nutch-for-typo3/
 
 # Installation
 
-You should have received an apache-nutch-for-typo3-<version>.tar.gz package containing Apache Nutch 1.5.1 and plugins for integration with Apache Solr for TYPO3. 
+TODO: You should have received an apache-nutch-for-typo3-<version>.tar.gz package containing Apache Nutch 1.5.1 and plugins for integration with Apache Solr for TYPO3. 
 
 Installation should be as easy as simply unpacking the tar.gz file.
 
