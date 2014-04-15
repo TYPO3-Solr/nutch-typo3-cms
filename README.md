@@ -93,11 +93,13 @@ nutch-585-excludeNodes.patch – 2011-09-18
 
 ## Authors
 
-Ingo Renner <ingo.renner@dkd.de>
-
-Phuong Doan <phuong.doan@dkd.de>
+Ingo Renner 
+Phuong Doan 
 
 ## License
 
 Apache License Version 2.0, January 2004
 
+## Support
+
+Please use the issues in Github for community support. Or contact dkd Internet Service GmbH for SLA based help. http://www.dkd.de/
