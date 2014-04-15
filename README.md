@@ -64,7 +64,7 @@ The sites to index must be added in urls/seed.txt, one per line.
 
 Use the following command to run Nutch:
 
-bin/nutch crawl urls -solr <Solr URL> -dir crawl -depth <Indexing depth> -topN <Number of pages per level>
+`bin/nutch crawl urls -solr <Solr URL> -dir crawl -depth <Indexing depth> -topN <Number of pages per level>`
 
 The place holders must be replaced by values fitting your environment of course.
 
