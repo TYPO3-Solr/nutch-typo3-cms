@@ -8,6 +8,8 @@ Apache Nutch plugins for TYPO3 CMS
 TYPO3 CMS is an Open Source Content Management System and Framework, well suited for internet, intranet, and extranet applications and websites. Due to its flexible plugin architecture TYPO3 CMS offers a maximum of possibilities. This makes it one of the most popular Open Source CMS worldwide.
 TYPO3 CMS is backed by the TYPO3 Association.
 
+http://typo3.org/
+
 ## What is Apache Nutch
 
 Apache Nutch is an open source web-search software project. Stemming from Apache Lucene, it now builds on Apache Solr adding web-specifics, such as a crawler, a link-graph database and parsing support handled by Apache Tika for HTML and and array other document formats.
@@ -17,6 +19,8 @@ Apache Nutch can run on a single machine, but gains a lot of its strength from r
 The system can be enhanced (eg other document formats can be parsed) using a highly flexible, easily extensible and thoroughly maintained plugin infrastructure.
 
 Apache Nutch is a project of the Apache Software Foundation.
+
+https://nutch.apache.org/
 
 ## What is Apache Nutch for TYPO3 CMS
 
@@ -29,6 +33,10 @@ The plug-ins provide the following features for use with Apache Solr for TYPO3:
 - Indexing of keywords from meta tags
 - Indexing of the SiteHash field 
 - Indexing of the uid field
+
+See more about:
+
+http://www.typo3-solr.com/en/solr-for-typo3/add-ons/apache-nutch-for-typo3/
 
 ## Systems requirements (will change soon)
 
