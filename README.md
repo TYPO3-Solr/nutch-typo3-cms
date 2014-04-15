@@ -3,9 +3,9 @@ Apache Nutch plugins for TYPO3 CMS
 
 1. Introduction
 
-1.1. What is TYPO3
+1.1. What is TYPO3 CMS
 
-TYPO3 is an Open Source Content Management System and Framework, well suited for internet, intranet, and extranet applications and websites. Due to its flexible plugin architecture TYPO3 offers a maximum of possibilities. This makes it one of the most popular Open Source CMS worldwide.
+TYPO3 CMS is an Open Source Content Management System and Framework, well suited for internet, intranet, and extranet applications and websites. Due to its flexible plugin architecture TYPO3 CMS offers a maximum of possibilities. This makes it one of the most popular Open Source CMS worldwide.
 TYPO3 is backed by the TYPO3 Association.
 
 1.2. What is Apache Nutch
@@ -17,9 +17,9 @@ Apache Nutch can run on a single machine, but gains a lot of its strength from r
 The system can be enhanced (eg other document formats can be parsed) using a highly flexible, easily extensible and thoroughly maintained plugin infrastructure.
 Apache Nutch is a project of the Apache Software Foundation.
 
-1.3. What is Apache Nutch for TYPO3
+1.3. What is Apache Nutch for TYPO3 CMS
 
-Apache Nutch for TYPO3 is a set of Nutch Plug-Ins to enable easy integration of the Nutch crawler with TYPO3 and specifically the Apache Solr for TYPO3 extension.
+Apache Nutch for TYPO3 CMS is a set of Nutch Plug-Ins to enable easy integration of the Nutch crawler with TYPO3 and specifically the Apache Solr for TYPO3 extension.
 
 The plug-ins provide the following features for use with Apache Solr for TYPO3:
 Indexing of the access field – Access Rootline
