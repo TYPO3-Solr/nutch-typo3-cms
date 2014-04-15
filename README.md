@@ -89,5 +89,10 @@ nutch-585-excludeNodes.patch – 2011-09-18
 
 ## Authors
 
+Ingo Renner <ingo.renner@dkd.de>
+Phuong Doan <phuong.doan@dkd.de>
+
 ## License
+
+Apache License Version 2.0, January 2004
 
