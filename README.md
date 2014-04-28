@@ -38,18 +38,22 @@ See more about:
 
 http://www.typo3-solr.com/en/solr-for-typo3/add-ons/apache-nutch-for-typo3/
 
-## Systems requirements (will change soon)
+## Systems requirements
 
-- TYPO3 CMS 4.5 
-- EXT:solr Version 2.8.3
-- Apache Solr 3.6.x
-- ...
+- TYPO3 CMS 4.5 - 6.2.x
+- EXT:solr Version 2.8.3 - 3.0.0
+- Apache Solr 3.6.x - 4.x
+- Ant 1.8+
 
 # Installation
 
-TODO: You should have received an apache-nutch-for-typo3-<version>.tar.gz package containing Apache Nutch 1.5.1 and plugins for integration with Apache Solr for TYPO3. 
+For creating your own binaries please build Apache Nutch plugins for TYPO3 CMS with ant. Please visit the official Apache Ant website for getting more information:
+http://ant.apache.org/
 
-Installation should be as easy as simply unpacking the tar.gz file.
+- build with ant
+- copy build/dist/apache-nutch-for-typo3-2.1.1.tar.gz and unpack it
+
+
 
 # Configuration
 
@@ -62,7 +66,9 @@ The sites to index must be added in urls/seed.txt, one per line.
 
 # Usage 
 
-Use the following command to run Nutch:
+## Nutch 1.5.1
+
+Use the following command to run Nutch 1.5.1:
 
 `bin/nutch crawl urls -solr <Solr URL> -dir crawl -depth <Indexing depth> -topN <Number of pages per level>`
 
@@ -77,6 +83,19 @@ The place holders must be replaced by values fitting your environment of course.
 -topN N determines the maximum number of pages that will be retrieved at each level up to the depth.
 
 Also, for more parameters see http://wiki.apache.org/nutch/bin/nutch_crawl 
+
+## Nutch 1.8
+
+Use the following command to run Nutch 1.8:
+
+`bin/crawl <seedDir> <crawlID> <solrURL> <numberOfRounds>`
+	
+Example: bin/crawl urls testcrawl http://localhost:8080/solr/core_en 2
+	
+The place holders must be replaced by values fitting your environment of course.
+
+The use of `bin/nutch crawl` is deprecated since Nutch 1.7 
+	
 
 # Development
 
