@@ -1,5 +1,7 @@
 /**
- * Copyright 2012 Ingo Renner <ingo.renner@dkd.de>
+ * Copyright 2012-2014 
+ *     Ingo Renner <ingo.renner@dkd.de>, 
+ *     Phuong Doan <phuong.doan@dkd.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +48,7 @@ public class KeywordsParser implements HtmlParseFilter {
    * check if the keywords metatag is set and store it in the metadata
    */
   @Override
-public ParseResult filter(Content content, ParseResult parseResult,
+  public ParseResult filter(Content content, ParseResult parseResult,
       HTMLMetaTags metaTags, DocumentFragment doc) {
     Parse parse = parseResult.get(content.getUrl());
     Metadata metadata = parse.getData().getParseMeta ();
@@ -58,15 +60,13 @@ public ParseResult filter(Content content, ParseResult parseResult,
 
       checkMetatag(metadata, mdName, value);
     }
-
-    Properties generalMetaTags = metaTags.getGeneralTags();
-    for (Enumeration<?> tagNames = generalMetaTags.propertyNames(); tagNames.hasMoreElements ();) {
-      String name = (String)tagNames.nextElement();
-      String value = generalMetaTags.getProperty(name);
-
-      checkMetatag(metadata, name, value);
+    
+    Metadata generalMetaTags = metaTags.getGeneralTags();
+    for (String name: generalMetaTags.names()){
+    	String value = generalMetaTags.get(name);
+    	checkMetatag(metadata, name, value);
     }
-
+    
     Properties httpequiv = metaTags.getHttpEquivTags();
     for (Enumeration<?> tagNames = httpequiv.propertyNames(); tagNames.hasMoreElements ();) {
       String name = (String)tagNames.nextElement();
@@ -79,12 +79,12 @@ public ParseResult filter(Content content, ParseResult parseResult,
   }
 
   @Override
-public void setConf(Configuration conf) {
+  public void setConf(Configuration conf) {
     this.conf = conf;
   }
 
   @Override
-public Configuration getConf() {
+  public Configuration getConf() {
     return this.conf;
   }
 

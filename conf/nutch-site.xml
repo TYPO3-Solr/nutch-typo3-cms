@@ -9,10 +9,20 @@
       please set this to a single word uniquely related to your organization.
     </description>
   </property>
-
+  
+  <property>
+	<name>http.robots.agents</name>
+	<value>ApacheNutchForTypo3,*</value>
+	<description>The agent strings we'll look for in robots.txt files,
+	comma-separated, in decreasing order of precedence. You should
+	put the value of http.agent.name as the first agent name, and keep the
+	default * at the end of the list. E.g.: BlurflDev,Blurfl,*
+	</description>
+  </property>
+  
   <property>
     <name>plugin.includes</name>
-    <value>protocol-http|urlfilter-regex|parse-(html|tika)|index-(basic|anchor|static)|scoring-opic|urlnormalizer-(pass|regex|basic)|language-identifier|urlmeta|typo3-(accessrootline|base|index-keywords|parse-keywords|sitehash|uid)</value>
+    <value>protocol-http|urlfilter-regex|parse-(html|tika)|index-(basic|anchor|static)|indexer-solr|scoring-opic|urlnormalizer-(pass|regex|basic)|language-identifier|urlmeta|typo3-(accessrootline|base|index-keywords|parse-keywords|sitehash|uid|endtime)</value>
     <description>
       Regular expression naming plugin directory names to
       include.  Any plugin not matching this expression is excluded.
@@ -79,6 +89,12 @@
       silently ignored by the parser so verify the indexed content 
       with Luke to confirm results.
     </description>
+  </property>
+  
+  <property>
+	<name>typo3.endtime</name>
+	<value>2020-01-01T00:00:00+0000</value>
+	<description>Adds a endtime value for the Solr documents.</description>
   </property>
 
 </configuration>
