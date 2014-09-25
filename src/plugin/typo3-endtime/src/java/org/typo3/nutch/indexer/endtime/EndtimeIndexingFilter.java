@@ -63,13 +63,28 @@ public class EndtimeIndexingFilter implements IndexingFilter {
 	public NutchDocument filter(NutchDocument doc, Parse parse, Text url,
 			CrawlDatum datum, Inlinks inlinks) throws IndexingException {
 
-		// convert ISO date to time stamp
-		String isoDate = conf.get(CONF_ENDTIME_PROPERTY, "1970-01-01T00:00:00Z");
+		// fetch the setting, default to 1970-01-01
+		String isoDateOrSecondsToAdd = conf.get(CONF_ENDTIME_PROPERTY, "1970-01-01T00:00:00Z");
 		long epoch = 0;
+
+		// Check if configured value is a long value
+		long milliSecondsToAdd = 0;
 		try {
-			epoch = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(isoDate).getTime();
-		} catch (ParseException e) {
-			LOG.error("ERROR! Cannot parse date, must fit pattern yyyy-MM-dd'T'HH:mm:ssZ : " + isoDate);
+			milliSecondsToAdd = Long.parseLong(isoDateOrSecondsToAdd);
+		} catch (NumberFormatException e) {
+			milliSecondsToAdd = 0;
+		}
+
+		// If milliSecondsToAdd could be parsed add them to the current timestamp.
+		if (milliSecondsToAdd > 0) {
+			epoch = new Date().getTime() + milliSecondsToAdd;
+		} else {
+			// Try to convert configured ISO date to time stamp
+			try {
+				epoch = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(isoDateOrSecondsToAdd).getTime();
+			} catch (ParseException e) {
+				LOG.error("ERROR! Cannot parse date, must fit pattern yyyy-MM-dd'T'HH:mm:ssZ : " + isoDateOrSecondsToAdd);
+			}
 		}
 
 		// Index the endtime
