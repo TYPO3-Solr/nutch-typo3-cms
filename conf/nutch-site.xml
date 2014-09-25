@@ -94,7 +94,12 @@
   <property>
 	<name>typo3.endtime</name>
 	<value>2020-01-01T00:00:00+0000</value>
-	<description>Adds a endtime value for the Solr documents.</description>
+	<description>
+		Adds an endtime value for the Solr documents.
+		You can set a static date in this format: 2020-01-01T00:00:00+0000
+		You can also set a long value to add the given number of
+		milliseconds to the current date, e.g. 1209600000 for two weeks.
+	</description>
   </property>
 
 </configuration>
