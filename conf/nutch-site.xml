@@ -22,7 +22,7 @@
 
   <property>
     <name>plugin.includes</name>
-    <value>protocol-http|urlfilter-regex|parse-(html|tika)|index-(basic|anchor|static)|indexer-solr|scoring-opic|urlnormalizer-(pass|regex|basic)|language-identifier|urlmeta|typo3-(accessrootline|base|index-keywords|parse-keywords|sitehash|uid|endtime)</value>
+    <value>protocol-http|urlfilter-regex|parse-(html|tika)|index-(basic|anchor|static)|indexer-solr|urlnormalizer-(pass|regex|basic)|language-identifier|urlmeta|typo3-(accessrootline|base|index-keywords|parse-keywords|sitehash|uid|endtime)</value>
     <description>
       Regular expression naming plugin directory names to
       include.  Any plugin not matching this expression is excluded.
