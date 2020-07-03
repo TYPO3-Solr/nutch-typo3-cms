@@ -9,7 +9,7 @@
       please set this to a single word uniquely related to your organization.
     </description>
   </property>
-  
+
   <property>
 	<name>http.robots.agents</name>
 	<value>ApacheNutchForTypo3,*</value>
@@ -19,7 +19,7 @@
 	default * at the end of the list. E.g.: BlurflDev,Blurfl,*
 	</description>
   </property>
-  
+
   <property>
     <name>plugin.includes</name>
     <value>protocol-http|urlfilter-regex|parse-(html|tika)|index-(basic|anchor|static)|indexer-solr|scoring-opic|urlnormalizer-(pass|regex|basic)|language-identifier|urlmeta|typo3-(accessrootline|base|index-keywords|parse-keywords|sitehash|uid|endtime)</value>
@@ -75,26 +75,26 @@
     <name>parser.html.NodesToExclude</name>
     <value></value>
     <description>
-      A list of nodes whose content will not be indexed separated by "|". 
+      A list of nodes whose content will not be indexed separated by "|".
       Use this to tell the HTML parser to ignore, for example, site navigation text.
 
-      Each node has three elements, separated by semi-colon: 
-      the first one is the tag name, 
-      the second one the attribute name, 
+      Each node has three elements, separated by semi-colon:
+      the first one is the tag name,
+      the second one the attribute name,
       the third one the value of the attribute.
 
       Example: table;summary;header|div;id;navigation
 
-      Note that nodes with these attributes, and their children, will be 
-      silently ignored by the parser so verify the indexed content 
+      Note that nodes with these attributes, and their children, will be
+      silently ignored by the parser so verify the indexed content
       with Luke to confirm results.
     </description>
   </property>
-  
+
   <property>
 	<name>typo3.endtime</name>
-	<value>2020-01-01T00:00:00+0000</value>
-	<description>Adds a endtime value for the Solr documents.</description>
+	<value>2030-01-01T00:00:00+0000</value>
+	<description>Adds a endtime value for the Solr documents. Please change to a date that fits your use case</description>
   </property>
 
 </configuration>

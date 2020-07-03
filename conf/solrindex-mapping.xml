@@ -26,7 +26,6 @@
 		<field source="siteHash" dest="siteHash" />
 		<field source="uid"      dest="uid" />
 		<field source="type"     dest="type" />
-		
 		<field source="site" dest="nutchSite_stringS" />
 		<field source="host" dest="nutchHost_stringS" />
 	</fields>
