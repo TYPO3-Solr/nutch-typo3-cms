@@ -11,13 +11,13 @@
   </property>
 
   <property>
-	<name>http.robots.agents</name>
-	<value>ApacheNutchForTypo3,*</value>
-	<description>The agent strings we'll look for in robots.txt files,
-	comma-separated, in decreasing order of precedence. You should
-	put the value of http.agent.name as the first agent name, and keep the
-	default * at the end of the list. E.g.: BlurflDev,Blurfl,*
-	</description>
+    <name>http.robots.agents</name>
+    <value>ApacheNutchForTypo3,*</value>
+    <description>The agent strings we'll look for in robots.txt files,
+    comma-separated, in decreasing order of precedence. You should
+    put the value of http.agent.name as the first agent name, and keep the
+    default * at the end of the list. E.g.: BlurflDev,Blurfl,*
+    </description>
   </property>
 
   <property>
@@ -92,9 +92,14 @@
   </property>
 
   <property>
-	<name>typo3.endtime</name>
-	<value>2030-01-01T00:00:00+0000</value>
-	<description>Adds a endtime value for the Solr documents. Please change to a date that fits your use case</description>
+    <name>typo3.endtime</name>
+    <value>2030-01-01T00:00:00+0000</value>
+    <description>
+      Adds an endtime value for the Solr documents.
+      You can set a static date in this format: 2020-01-01T00:00:00+0000
+      You can also set a long value to add the given number of
+      milliseconds to the current date, e.g. 1209600000 for two weeks.
+    </description>
   </property>
 
 </configuration>
