@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="${name}" default="dist">
 
-	<property file="${basedir}/default.properties" />
+	<property file="./default.properties" />
 
 	<!--	
 		Targets named nutch-* simply call Nutch's own ant targets
@@ -34,7 +34,7 @@
 	<!-- Building Nutch                                         -->
 	<!-- ====================================================== -->
 	<target name="compile" 
-		depends="nutch-compile, compile-typo3-plugins" 
+		depends="nutch-compile, compile-typo3-plugins"
 		description="--> build Nutch" 
 	/>
 
@@ -55,7 +55,7 @@
 			patchfile="${basedir}/patches/nutch-585-excludeNodes.patch"
 			dir="${build.nutch}"
 			strip="0"
-			failonerror="true"
+			failonerror="false"
 		/>
 	</target>
 
