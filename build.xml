@@ -45,7 +45,7 @@
 	<target name="compile-checkout-src" depends="init">
 		<exec executable="svn">
 			<arg value="checkout"/>
-			<arg value="${nutch.scmsrc}/tags/release-${nutch.version}"/>
+			<arg value="${nutch.scmsrc}/${nutch.version}"/>
 			<arg value="${build.nutch}"/>
 		</exec>
 	</target>
