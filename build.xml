@@ -35,7 +35,7 @@
 	<!-- ====================================================== -->
 	<target name="compile" 
 		depends="nutch-compile, compile-typo3-plugins"
-		description="--> build Nutch" 
+		description="--> build Nutch"
 	/>
 
 	<target name="nutch-compile" depends="init, compile-checkout-src, compile-patch-nutch">
@@ -43,10 +43,17 @@
 	</target>
 
 	<target name="compile-checkout-src" depends="init">
-		<exec executable="svn">
-			<arg value="checkout"/>
-			<arg value="${nutch.scmsrc}/${nutch.version}"/>
+		<exec executable="git">
+			<arg value="clone"/>
+			<arg value="${nutch.scmsrc}"/>
 			<arg value="${build.nutch}"/>
+		</exec>
+		<exec executable="cd">
+			<arg value="${build.nutch}"/>
+		</exec>
+		<exec executable="git">
+			<arg value="checkout"/>
+			<arg value="release-${nutch.version}"/>
 		</exec>
 	</target>
 
