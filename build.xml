@@ -46,7 +46,7 @@
 		<exec executable="git">
 			<arg value="clone"/>
 			<arg value="${nutch.scmsrc}"/>
-			<arg value="--tag"/>
+			<arg value="--branch"/>
 			<arg value="release-${nutch.version}"/>
 			<arg value="${build.nutch}"/>
 		</exec>
