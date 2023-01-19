@@ -50,15 +50,6 @@
 			<arg value="release-${nutch.version}"/>
 			<arg value="${build.nutch}"/>
 		</exec>
-		<!--
-		<exec executable="cd">
-			<arg value="${build.nutch}"/>
-		</exec>
-		<exec executable="git">
-			<arg value="checkout"/>
-			<arg value="release-${nutch.version}"/>
-		</exec>
-		-->
 	</target>
 
 	<target name="compile-patch-nutch" depends="init, compile-checkout-src">
