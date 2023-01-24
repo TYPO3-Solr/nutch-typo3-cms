@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="${name}" default="dist">
 
-	<property file="${basedir}/default.properties" />
+	<property file="./default.properties" />
 
 	<!--	
 		Targets named nutch-* simply call Nutch's own ant targets
@@ -34,18 +34,20 @@
 	<!-- Building Nutch                                         -->
 	<!-- ====================================================== -->
 	<target name="compile" 
-		depends="nutch-compile, compile-typo3-plugins" 
-		description="--> build Nutch" 
+		depends="nutch-compile, compile-typo3-plugins"
+		description="--> build Nutch"
 	/>
 
-	<target name="nutch-compile" depends="init, compile-checkout-src, compile-patch-nutch">
+	<target name="nutch-compile" depends="init, compile-checkout-src">
 		<ant dir="${build.nutch}" inheritAll="false"/>
 	</target>
 
 	<target name="compile-checkout-src" depends="init">
-		<exec executable="svn">
-			<arg value="checkout"/>
-			<arg value="${nutch.scmsrc}/tags/release-${nutch.version}"/>
+		<exec executable="git">
+			<arg value="clone"/>
+			<arg value="${nutch.scmsrc}"/>
+			<arg value="--branch"/>
+			<arg value="release-${nutch.version}"/>
 			<arg value="${build.nutch}"/>
 		</exec>
 	</target>
@@ -55,7 +57,7 @@
 			patchfile="${basedir}/patches/nutch-585-excludeNodes.patch"
 			dir="${build.nutch}"
 			strip="0"
-			failonerror="true"
+			failonerror="false"
 		/>
 	</target>
 
