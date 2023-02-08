@@ -5,10 +5,11 @@ Apache Nutch plugins for TYPO3 CMS
 
 ## What is TYPO3 CMS
 
-TYPO3 CMS is an Open Source Content Management System and Framework, well suited for internet, intranet, and extranet applications and websites. Due to its flexible plugin architecture TYPO3 CMS offers a maximum of possibilities. This makes it one of the most popular Open Source CMS worldwide.
-TYPO3 CMS is backed by the TYPO3 Association.
+TYPO3 CMS is an Open Source Content Management System and Framework, well suited for internet, intranet, and extranet applications and websites. 
+Due to its flexible plugin architecture TYPO3 CMS offers a maximum of possibilities. 
+This makes it one of the most popular Open Source CMS worldwide.
 
-http://typo3.org/
+TYPO3 CMS is backed by the [TYPO3 Association](https://typo3.org/).
 
 ## What is Apache Nutch
 
@@ -18,9 +19,8 @@ Apache Nutch can run on a single machine, but gains a lot of its strength from r
 
 The system can be enhanced (eg other document formats can be parsed) using a highly flexible, easily extensible and thoroughly maintained plugin infrastructure.
 
-Apache Nutch is a project of the Apache Software Foundation.
-
-https://nutch.apache.org/
+[Apache Nutch](https://nutch.apache.org/) is a project of the Apache Software Foundation.
+Learn more by visiting the [official wiki of Apache Nutch](https://cwiki.apache.org/confluence/display/NUTCH/Home).
 
 ## What is Apache Nutch for TYPO3 CMS
 
@@ -34,35 +34,35 @@ The plug-ins provide the following features for use with Apache Solr for TYPO3:
 - Indexing of the SiteHash field 
 - Indexing of the uid field
 
-See more about:
+Learn more on the [official website of Apache Nutch for TYPO3 CMS](https://www.typo3-solr.com/solr-for-typo3/add-ons/public-extensions/apache-nutch-for-typo3/).
 
-http://www.typo3-solr.com/en/solr-for-typo3/add-ons/apache-nutch-for-typo3/
+# Setup
 
-## Systems requirements
+## Systems Requirements
 
 - TYPO3 CMS 4.5 - 6.2.x
 - EXT:solr Version 2.8.3 - 3.0.0
 - Apache Solr 3.6.x - 4.x
 - Ant 1.8+
 
-# Installation
+## Installation
 
-For creating your own binaries please build Apache Nutch plugins for TYPO3 CMS with ant. Please visit the official Apache Ant website for getting more information:
-http://ant.apache.org/
+For creating your own binaries you can build this plugin with ant.
+Please visit the [official Apache Ant website](http://ant.apache.org/) for further information.
 
-- build with ant
-- copy build/dist/apache-nutch-for-typo3-2.1.1.tar.gz and unpack it
+- build with `ant dist`
+- copy and unpack `build/dist/apache-nutch-for-typo3-2.1.1.tar.gz`
 
+## Configuration
 
+Most of the settings are pre-configured already and should be ok for most scenarios. However, you still need to configure a few things. 
 
-# Configuration
+Set the **URL** and the **API key** of your TYPO3 site with the Apache Solr for TYPO3 extension.
+You can find them in the navigation pane on the left side under `Apache Solr > Info`.
 
-Most of the settings are pre-configured already and should be ok for most scenarios. However, you still need to configure a few things. Open conf/nutch-site.xml
+Inside `conf/nutch-site.xml` you need to put these values for the properties `typo3.baseUrl` and `typo3.api.key`.
 
-Here you need to set the URL and the API key of your TYPO3 site with the Apache Solr for TYPO3 extension. You can find the API key at the bottom of the Admin Tools → Search backend module.
-
-The properties to change are typo3.baseUrl and typo3.api.key
-The sites to index must be added in urls/seed.txt, one per line.
+The sites to index must be added in `urls/seed.txt`, one per line.
 
 # Usage 
 
@@ -137,4 +137,5 @@ Apache License Version 2.0, January 2004
 
 ## Support
 
-Please use the issues in Github for community support. Or contact dkd Internet Service GmbH for SLA based help. http://www.dkd.de/
+Please use the issues in Github for community support.
+Or contact [dkd Internet Service GmbH](https://www.dkd.de/) for SLA based help. 
