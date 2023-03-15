@@ -57,7 +57,7 @@
 		description="--> build Nutch"
 	/>
 
-	<target name="nutch-compile" depends="init, compile-checkout-src">
+	<target name="nutch-compile" depends="init, compile-checkout-src, compile-patch-nutch">
 		<ant dir="${build.nutch}" inheritAll="false"/>
 	</target>
 
