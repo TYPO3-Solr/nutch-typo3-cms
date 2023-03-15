@@ -36,20 +36,32 @@ Index: src/plugin/parse-html/src/java/org/apache/nutch/parse/html/HtmlParser.jav
 ===================================================================
 --- src/plugin/parse-html/src/java/org/apache/nutch/parse/html/HtmlParser.java	(Revision 1380217)
 +++ src/plugin/parse-html/src/java/org/apache/nutch/parse/html/HtmlParser.java	(Arbeitskopie)
-@@ -18,6 +18,7 @@
- package org.apache.nutch.parse.html;
- 
+@@ -23,6 +23,7 @@ import java.io.FileInputStream;
+ import java.io.IOException;
+ import java.lang.invoke.MethodHandles;
  import java.util.ArrayList;
 +import java.util.StringTokenizer;
  import java.util.Map;
- import java.net.URL;
- import java.net.MalformedURLException;
-@@ -112,7 +113,15 @@
-   private HtmlParseFilters htmlParseFilters;
-   
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+@@ -36,10 +37,13 @@ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ import org.w3c.dom.DOMException;
+ import org.w3c.dom.DocumentFragment;
++import org.w3c.dom.Node;
++import org.w3c.dom.NodeList;
+ import org.apache.hadoop.conf.Configuration;
+ import org.apache.html.dom.HTMLDocumentImpl;
+ import org.apache.nutch.metadata.Metadata;
+ import org.apache.nutch.metadata.Nutch;
++import org.apache.nutch.parse.html.DOMContentUtils;
+ import org.apache.nutch.parse.HTMLMetaTags;
+ import org.apache.nutch.parse.HtmlParseFilters;
+ import org.apache.nutch.parse.Outlink;
+@@ -143,6 +147,13 @@ public class HtmlParser implements Parser {
+ 
    private String cachingPolicy;
--  
-+
+ 
 +  // The list of node to be excluded.
 +  // Each array has 3 position:
 +  // 1st: tag name
@@ -57,107 +69,113 @@ Index: src/plugin/parse-html/src/java/org/apache/nutch/parse/html/HtmlParser.jav
 +  // 3rd: attribute value
 +  private String [][] nodesToExclude;
 +
-+  @Override
+   @Override
    public ParseResult getParse(Content content) {
      HTMLMetaTags metaTags = new HTMLMetaTags();
- 
-@@ -161,6 +170,23 @@
+@@ -204,21 +215,6 @@ public class HtmlParser implements Parser {
      if (LOG.isTraceEnabled()) {
        LOG.trace("Meta tags for " + base + ": " + metaTags.toString());
      }
-+
-+    if (!metaTags.getNoFollow()) {              // okay to follow links
-+      ArrayList<Outlink> l = new ArrayList<Outlink>();   // extract outlinks
-+      URL baseTag = utils.getBase(root);
-+      if (LOG.isTraceEnabled()) { LOG.trace("Getting links..."); }
-+      utils.getOutlinks(baseTag!=null?baseTag:base, l, root);
-+      outlinks = l.toArray(new Outlink[l.size()]);
-+      if (LOG.isTraceEnabled()) {
-+        LOG.trace("found "+outlinks.length+" outlinks in "+content.getUrl());
-+      }
+-    // check meta directives
+-    if (!metaTags.getNoIndex()) { // okay to index
+-      StringBuffer sb = new StringBuffer();
+-      if (LOG.isTraceEnabled()) {
+-        LOG.trace("Getting text...");
+-      }
+-      utils.getText(sb, root); // extract text
+-      text = sb.toString();
+-      sb.setLength(0);
+-      if (LOG.isTraceEnabled()) {
+-        LOG.trace("Getting title...");
+-      }
+-      utils.getTitle(sb, root); // extract title
+-      title = sb.toString().trim();
+-    }
+ 
+     if (!metaTags.getNoFollow()) { // okay to follow links
+       ArrayList<Outlink> l = new ArrayList<Outlink>(); // extract outlinks
+@@ -242,6 +238,27 @@ public class HtmlParser implements Parser {
+       }
+     }
+ 
++    if ((this.nodesToExclude != null) && (this.nodesToExclude.length > 0)) {
++      LOG.info("Excluding Nodes...");
++      excludeNode(root);
 +    }
 +
-+	if ((this.nodesToExclude != null) && (this.nodesToExclude.length > 0)) {
-+	  LOG.info("Excluding Nodes...");
-+	  excludeNode(root);
-+	}
-+
-     // check meta directives
-     if (!metaTags.getNoIndex()) {               // okay to index
-       StringBuffer sb = new StringBuffer();
-@@ -172,18 +198,7 @@
-       utils.getTitle(sb, root);         // extract title
-       title = sb.toString().trim();
-     }
--      
--    if (!metaTags.getNoFollow()) {              // okay to follow links
--      ArrayList<Outlink> l = new ArrayList<Outlink>();   // extract outlinks
--      URL baseTag = utils.getBase(root);
--      if (LOG.isTraceEnabled()) { LOG.trace("Getting links..."); }
--      utils.getOutlinks(baseTag!=null?baseTag:base, l, root);
--      outlinks = l.toArray(new Outlink[l.size()]);
--      if (LOG.isTraceEnabled()) {
--        LOG.trace("found "+outlinks.length+" outlinks in "+content.getUrl());
--      }
--    }
--    
++    // check meta directives
++    if (!metaTags.getNoIndex()) { // okay to index
++      StringBuffer sb = new StringBuffer();
++      if (LOG.isTraceEnabled()) {
++        LOG.trace("Getting text...");
++      }
++      utils.getText(sb, root); // extract text
++      text = sb.toString();
++      sb.setLength(0);
++      if (LOG.isTraceEnabled()) {
++        LOG.trace("Getting title...");
++      }
++      utils.getTitle(sb, root); // extract title
++      title = sb.toString().trim();
++    }
 +
      ParseStatus status = new ParseStatus(ParseStatus.SUCCESS);
      if (metaTags.getRefresh()) {
        status.setMinorCode(ParseStatus.SUCCESS_REDIRECT);
-@@ -206,6 +221,51 @@
+@@ -264,6 +281,52 @@ public class HtmlParser implements Parser {
      return filteredParse;
    }
  
 +  protected void excludeNode(Node pNode) {
-+		// do we need to strip this node itself?
-+		boolean wasStripped = false;
++    // do we need to strip this node itself?
++    boolean wasStripped = false;
 +
-+		for (int i = 0; i < this.nodesToExclude.length; ++i) {
-+			if (this.nodesToExclude[i][0].equalsIgnoreCase(pNode.getNodeName())
-+					&& pNode.hasAttributes()) {
++    for (int i = 0; i < this.nodesToExclude.length; ++i) {
++      if (this.nodesToExclude[i][0].equalsIgnoreCase(pNode.getNodeName())
++          && pNode.hasAttributes()) {
 +
-+				Node idNode = pNode.getAttributes().getNamedItem(
-+						this.nodesToExclude[i][1]);
-+				String idValue = (idNode != null) ? idNode.getNodeValue()
-+						: null;
-+				if (idValue != null) {
-+					if (idValue.equalsIgnoreCase(this.nodesToExclude[i][2])) {
++        Node idNode = pNode.getAttributes().getNamedItem(
++            this.nodesToExclude[i][1]);
++        String idValue = (idNode != null) ? idNode.getNodeValue()
++            : null;
++        if (idValue != null) {
++          if (idValue.equalsIgnoreCase(this.nodesToExclude[i][2])) {
 +
-+						// can't remove this node, but we can strip it
-+						if (LOG.isTraceEnabled())
-+							LOG.trace("Stripping " + pNode.getNodeName() + "#"
-+									+ idNode.getNodeValue());
-+						pNode.setNodeValue("");
++            // can't remove this node, but we can strip it
++            if (LOG.isTraceEnabled())
++              LOG.trace("Stripping " + pNode.getNodeName() + "#"
++                  + idNode.getNodeValue());
++            pNode.setNodeValue("");
 +
-+						// remove all children for this node
-+						while (pNode.hasChildNodes())
-+							pNode.removeChild(pNode.getFirstChild());
++            // remove all children for this node
++            while (pNode.hasChildNodes())
++              pNode.removeChild(pNode.getFirstChild());
 +
-+						wasStripped = true;
-+						break;
-+					}
-+				}
-+			}
-+		}
++            wasStripped = true;
++            break;
++          }
++        }
++      }
++    }
 +
-+		if (!wasStripped) {
-+			// now process the children recursively
-+			NodeList children = pNode.getChildNodes();
-+			if (children != null) {
++    if (!wasStripped) {
++      // now process the children recursively
++      NodeList children = pNode.getChildNodes();
++      if (children != null) {
 +
-+				int len = children.getLength();
-+				for (int i = 0; i < len; i++) {
-+					excludeNode(children.item(i));
-+				}
-+			}
-+		}
-+	}
++        int len = children.getLength();
++        for (int i = 0; i < len; i++) {
++          excludeNode(children.item(i));
++        }
++      }
++    }
++  }
++
 +
    private DocumentFragment parse(InputSource input) throws Exception {
-     if (parserImpl.equalsIgnoreCase("tagsoup"))
+     if ("tagsoup".equalsIgnoreCase(parserImpl))
        return parseTagSoup(input);
-@@ -293,6 +353,21 @@
+@@ -369,6 +432,21 @@ public class HtmlParser implements Parser {
      this.utils = new DOMContentUtils(conf);
      this.cachingPolicy = getConf().get("parser.caching.forbidden.policy",
          Nutch.CACHING_FORBIDDEN_CONTENT);
@@ -166,16 +184,16 @@ Index: src/plugin/parse-html/src/java/org/apache/nutch/parse/html/HtmlParser.jav
 +    String divsToExclude = getConf().get("parser.html.NodesToExclude", null);
 +    if ((divsToExclude != null) && (divsToExclude.trim().length() > 0)) {
 +
-+    		LOG.warn("Configured using [parser.html.NodesToExclude] to ignore DIVs with IDs [" + divsToExclude + "]...");
-+    		StringTokenizer st = new StringTokenizer(divsToExclude , "|");
-+    		this.nodesToExclude = new String[st.countTokens()][];
-+    		int i = 0;
-+    		while ( st.hasMoreTokens() )
-+    		{
-+    			this.nodesToExclude[i] = st.nextToken().split(";");
-+    			i++;
-+    		}
-+  	}
++        LOG.warn("Configured using [parser.html.NodesToExclude] to ignore DIVs with IDs [" + divsToExclude + "]...");
++        StringTokenizer st = new StringTokenizer(divsToExclude , "|");
++        this.nodesToExclude = new String[st.countTokens()][];
++        int i = 0;
++        while ( st.hasMoreTokens() )
++        {
++          this.nodesToExclude[i] = st.nextToken().split(";");
++          i++;
++        }
++    }
    }
  
-   public Configuration getConf() {
+   @Override
