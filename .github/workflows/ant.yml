@@ -24,6 +24,7 @@ jobs:
     - name: Build with Ant
       run: ant -noinput -buildfile build.xml
     - name: Archive production artifacts
+      if: ${{ github.ref == 'refs/heads/main' }}
       uses: actions/upload-artifact@v3
       with:
         name: apache-nutch-for-typo3-2.1.1
