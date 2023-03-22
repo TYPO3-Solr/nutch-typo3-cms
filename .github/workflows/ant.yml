@@ -27,4 +27,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: apache-nutch-for-typo3-2.1.1
-        path: dist/apache-nutch-for-typo3-2.1.1.tar.gz
+        path: build/dist/apache-nutch-for-typo3-2.1.1.tar.gz
