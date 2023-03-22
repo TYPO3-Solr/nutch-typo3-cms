@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="${name}" default="dist">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="${name}" default="dist">
 
 	<property file="./default.properties" />
 
@@ -19,7 +19,6 @@
 
 	-->
 
-
 	<!-- ====================================================== -->
 	<!-- Stuff needed by all targets                            -->
 	<!-- ====================================================== -->
@@ -29,6 +28,26 @@
 		<mkdir dir="${build.dist}"/>
 	</target>
 
+	<target name="download-ivy" depends="init" unless="offline">
+
+		<mkdir dir="${ivy.jar.dir}"/>
+		<!-- download Ivy from web site so that it can be used even without any special installation -->
+		<get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+			 dest="${ivy.jar.file}" usetimestamp="true"/>
+	</target>
+
+	<target name="init-ivy" depends="download-ivy">
+		<!-- try to load Ivy here from Ivy home, in case the user has not already dropped
+				it into Ant's lib dir (note that the latter copy will always take precedence).
+				We will not fail as long as local lib dir exists (it may be empty) and
+				Ivy is in at least one of Ant's lib dir or the local lib dir. -->
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml"
+				 uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+	</target>
 
 	<!-- ====================================================== -->
 	<!-- Building Nutch                                         -->
@@ -42,7 +61,7 @@
 		<ant dir="${build.nutch}" inheritAll="false"/>
 	</target>
 
-	<target name="compile-checkout-src" depends="init">
+	<target name="compile-checkout-src" depends="init, init-ivy">
 		<exec executable="git">
 			<arg value="clone"/>
 			<arg value="${nutch.scmsrc}"/>
