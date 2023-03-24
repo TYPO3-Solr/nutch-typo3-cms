@@ -31,7 +31,7 @@ The plug-ins provide the following features for use with Apache Solr for TYPO3:
 - Indexing of the access field – Access Rootline
 - Indexing of the endtime field
 - Indexing of keywords from meta tags
-- Indexing of the SiteHash field 
+- Indexing of the SiteHash field
 - Indexing of the uid field
 
 See more about:
@@ -40,10 +40,11 @@ http://www.typo3-solr.com/en/solr-for-typo3/add-ons/apache-nutch-for-typo3/
 
 ## Systems requirements
 
-- TYPO3 CMS 4.5 - 6.2.x
-- EXT:solr Version 2.8.3 - 3.0.0
-- Apache Solr 3.6.x - 4.x
-- Ant 1.8+
+- TYPO3 CMS: 10.4 - 11.5
+- EXT:solr Version 11.2 - 11.5+
+- Apache Solr: 8.11
+- Ant 1.10+
+- Apache Ivy 2.5+
 
 # Installation
 
@@ -51,9 +52,7 @@ For creating your own binaries please build Apache Nutch plugins for TYPO3 CMS w
 http://ant.apache.org/
 
 - build with ant
-- copy build/dist/apache-nutch-for-typo3-2.1.1.tar.gz and unpack it
-
-
+- copy build/dist/apache-nutch-for-typo3-2.2.0.tar.gz and unpack it
 
 # Configuration
 
@@ -64,54 +63,35 @@ Here you need to set the URL and the API key of your TYPO3 site with the Apache 
 The properties to change are typo3.baseUrl and typo3.api.key
 The sites to index must be added in urls/seed.txt, one per line.
 
-# Usage 
+# Usage
 
-## Nutch 1.5.1
+## Nutch 1.19+
 
-Use the following command to run Nutch 1.5.1:
+First you have to configure your Solr core in: conf/index-writers.xml
 
-`bin/nutch crawl urls -solr <Solr URL> -dir crawl -depth <Indexing depth> -topN <Number of pages per level>`
+To start the crawling use the following command to run Nutch 1.19+:
+
+`bin/crawl -i -s <seedDir> <crawlID> <numberOfRounds>`
+
+Example: `bin/crawl -i -s urls testcrawl 2`
 
 The place holders must be replaced by values fitting your environment of course.
-
--solr points to your Solr server (f.e. Http://localhost:8080/solr/core_en)
-
--dir dir names the directory to put the crawl in.
-
--depth depth indicates the link depth from the root page that should be crawled.
-
--topN N determines the maximum number of pages that will be retrieved at each level up to the depth.
-
-Also, for more parameters see http://wiki.apache.org/nutch/bin/nutch_crawl 
-
-## Nutch 1.8
-
-Use the following command to run Nutch 1.8:
-
-`bin/crawl <seedDir> <crawlID> <solrURL> <numberOfRounds>`
-	
-Example: bin/crawl urls testcrawl http://localhost:8080/solr/core_en 2
-	
-The place holders must be replaced by values fitting your environment of course.
-
-The use of `bin/nutch crawl` is deprecated since Nutch 1.7 
-	
 
 # Development
 
-The Nutch version used for developing the plugins is Apache Nutch 1.5.1. Version 2.0 has not been tested.
+The Nutch version used for developing the plugins is Apache Nutch 1.5.1. Latest tested version is 1.19, 2.0 has not been tested.
 
 ## Development Environment Setup
 
-Check out Apache Nutch (AN) from Apache SVN
-Check out Apache Nutch for TYPO3 (ANfT) from Github
+Check out Apache Nutch (AN) from GitHub
+Check out Apache Nutch for TYPO3 (ANfT) from GitHub
 In your IDE link AN into ANfT to get code completion
 
 ## Packaging
 
 The Apache Nutch for TYPO3 CMS project checkout provides an Ant build script. On the command line change to the project directory and simply run ant To build a distributable package. The distributable will be build in AnfT/build/dist/.
 
-The Ant build script 
+The Ant build script
 - checks out Apache Nutch
 - patches Nutch with the changes listed below
 - copies the TYPO3 plug-ins into the checked-out Nutch source directory
@@ -122,14 +102,13 @@ The Ant build script
 ## Changes
 
 The distribution includes the following changes:
-NUTCH-585: Allows to exclude certain parts of a HTML page from being indexed. 
+NUTCH-585: Allows to exclude certain parts of a HTML page from being indexed.
 nutch-585-excludeNodes.patch – 2011-09-18
 
 ## Authors
 
-Ingo Renner 
-
-Phuong Doan 
+- Ingo Renner
+- Phuong Doan
 
 ## License
 
