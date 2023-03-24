@@ -104,6 +104,7 @@ public class SiteHashIndexingFilter implements IndexingFilter {
 		doc.add(INDEXING_FIELD_SITEHASH, siteHash.toString());
 
 		// Index the id (siteHash + nutch_external + url)
+		doc.removeField(INDEXING_FIELD_ID);
 		doc.add(INDEXING_FIELD_ID,
 				siteHash + "/tx_nutch_external/" + url.toString());
 
