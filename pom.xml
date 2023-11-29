@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.typo3.nutch</groupId>
 	<artifactId>apache-nutch-for-typo3</artifactId>
-	<version>2.2.0</version>
+	<version>2.3.0</version>
 	<name>Apache Nutch for TYPO3</name>
 	<description>A set of plug-ins for Nutch to query a TYPO3 installation for information necessary to index crawled documents into an Apache Solr for TYPO3 installation.</description>
 
