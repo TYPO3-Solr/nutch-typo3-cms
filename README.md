@@ -1,5 +1,5 @@
 Apache Nutch plugins for TYPO3 CMS
-===============
+==================================
 
 # Introduction
 
@@ -64,6 +64,13 @@ You can find them in the navigation pane on the left side under `Apache Solr > I
 Inside `conf/nutch-site.xml` you need to put these values for the properties `typo3.baseUrl` and `typo3.api.key`.
 
 The sites to index must be added in `urls/seed.txt`, one per line.
+
+### TYPO3 configuration
+
+To include documents from Apache Nutch, type `tx_nutch_external`, in your TYPO3 results shown by EXT:solr, you have to configure the allowed sites:
+`plugin.tx_solr.search.query.allowedSites = *`
+
+`__all` is not sufficient here, as this will just include all domains configured in TYPO3.
 
 # Usage
 
