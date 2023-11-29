@@ -52,7 +52,7 @@ For creating your own binaries you can build this plugin with ant.
 Please visit the [official Apache Ant website](http://ant.apache.org/) for further information.
 
 - build with `ant dist`
-- copy and unpack `build/dist/apache-nutch-for-typo3-2.2.0.tar.gz`
+- copy and unpack `build/dist/apache-nutch-for-typo3-2.3.0.tar.gz`
 
 ## Configuration
 
