@@ -5,8 +5,8 @@ Apache Nutch plugins for TYPO3 CMS
 
 ## What is TYPO3 CMS
 
-TYPO3 CMS is an Open Source Content Management System and Framework, well suited for internet, intranet, and extranet applications and websites. 
-Due to its flexible plugin architecture TYPO3 CMS offers a maximum of possibilities. 
+TYPO3 CMS is an Open Source Content Management System and Framework, well suited for internet, intranet, and extranet applications and websites.
+Due to its flexible plugin architecture TYPO3 CMS offers a maximum of possibilities.
 This makes it one of the most popular Open Source CMS worldwide.
 
 TYPO3 CMS is backed by the [TYPO3 Association](https://typo3.org/).
@@ -40,9 +40,9 @@ Learn more on the [official website of Apache Nutch for TYPO3 CMS](https://www.t
 
 ## Systems Requirements
 
-- TYPO3 CMS: 10.4 - 11.5
-- EXT:solr Version 11.2 - 11.5+
-- Apache Solr: 8.11
+- TYPO3 CMS: 10.4 - 12.4
+- EXT:solr Version 11.2 - 12.0+
+- Apache Solr: 8.11, 9.3
 - Ant 1.10+
 - Apache Ivy 2.5+
 
@@ -56,7 +56,7 @@ Please visit the [official Apache Ant website](http://ant.apache.org/) for furth
 
 ## Configuration
 
-Most of the settings are pre-configured already and should be ok for most scenarios. However, you still need to configure a few things. 
+Most of the settings are pre-configured already and should be ok for most scenarios. However, you still need to configure a few things.
 
 Set the **URL** and the **API key** of your TYPO3 site with the Apache Solr for TYPO3 extension.
 You can find them in the navigation pane on the left side under `Apache Solr > Info`.
@@ -119,4 +119,4 @@ Apache License Version 2.0, January 2004
 ## Support
 
 Please use the issues in Github for community support.
-Or contact [dkd Internet Service GmbH](https://www.dkd.de/) for SLA based help. 
+Or contact [dkd Internet Service GmbH](https://www.dkd.de/) for SLA based help.
