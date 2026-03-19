@@ -6,6 +6,7 @@ name: Java CI
 on:
   push:
     branches: [ "main" ]
+    tags: [ "*" ]
   pull_request:
     branches: [ "main" ]
 
@@ -21,11 +22,19 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+    - name: Read version from properties
+      id: version
+      run: echo "VERSION=$(grep '^version' default.properties | sed 's/.*= *//')" >> "$GITHUB_OUTPUT"
     - name: Build with Ant
       run: ant -noinput -buildfile build.xml
     - name: Archive production artifacts
-      if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/') }}
       uses: actions/upload-artifact@v4
       with:
-        name: apache-nutch-for-typo3-2.3.0
-        path: build/dist/apache-nutch-for-typo3-2.3.0.tar.gz
+        name: apache-nutch-for-typo3-${{ steps.version.outputs.VERSION }}
+        path: build/dist/apache-nutch-for-typo3-${{ steps.version.outputs.VERSION }}.tar.gz
+    - name: Upload release asset
+      if: ${{ startsWith(github.ref, 'refs/tags/') }}
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: gh release upload "${{ github.ref_name }}" "build/dist/apache-nutch-for-typo3-${{ steps.version.outputs.VERSION }}.tar.gz" --repo "${{ github.repository }}"
