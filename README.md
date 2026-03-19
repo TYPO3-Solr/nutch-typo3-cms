@@ -13,9 +13,9 @@ TYPO3 CMS is backed by the [TYPO3 Association](https://typo3.org/).
 
 ## What is Apache Nutch
 
-Apache Nutch is an open source web-search software project. Stemming from Apache Lucene, it now builds on Apache Solr adding web-specifics, such as a crawler, a link-graph database and parsing support handled by Apache Tika for HTML and and array other document formats.
+Apache Nutch is an open source web-search software project. Stemming from Apache Lucene, it now builds on Apache Solr adding web-specifics, such as a crawler, a link-graph database and parsing support handled by Apache Tika for HTML and an array of other document formats.
 
-Apache Nutch can run on a single machine, but gains a lot of its strength from running in a Hadoop cluster
+Apache Nutch can run on a single machine, but gains a lot of its strength from running in a Hadoop cluster.
 
 The system can be enhanced (eg other document formats can be parsed) using a highly flexible, easily extensible and thoroughly maintained plugin infrastructure.
 
@@ -86,9 +86,18 @@ Example: `bin/crawl -i -s urls testcrawl 2`
 
 The place holders must be replaced by values fitting your environment of course.
 
+### Note for Apple Silicon (ARM64) users
+
+When running Nutch inside DDEV on Apple Silicon (M1/M2/M3), the Java path in `bin/nutch` may default to
+`/usr/lib/jvm/java-11-openjdk-amd64`. You need to set `JAVA_HOME` to the ARM64 path instead:
+
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64
+```
+
 # Development
 
-The Nutch version used for developing the plugins is Apache Nutch 1.5.1. Latest tested version is 1.19, 2.0 has not been tested.
+The Nutch version used for developing the plugins is Apache Nutch 1.19. Version 2.x has not been tested.
 
 ## Development Environment Setup
 
@@ -98,7 +107,7 @@ The Nutch version used for developing the plugins is Apache Nutch 1.5.1. Latest 
 
 ## Packaging
 
-The Apache Nutch for TYPO3 CMS project checkout provides an Ant build script. On the command line change to the project directory and simply run ant To build a distributable package. The distributable will be build in AnfT/build/dist/.
+The Apache Nutch for TYPO3 CMS project checkout provides an Ant build script. On the command line change to the project directory and simply run `ant dist` to build a distributable package. The distributable will be built in `build/dist/`.
 
 The Ant build script
 - checks out Apache Nutch
@@ -125,5 +134,9 @@ Apache License Version 2.0, January 2004
 
 ## Support
 
-Please use the issues in Github for community support.
+Please use the issues in GitHub for community support.
 Or contact [dkd Internet Service GmbH](https://www.dkd.de/) for SLA based help.
+
+## Security
+
+Please see [SECURITY.md](SECURITY.md) for reporting vulnerabilities.

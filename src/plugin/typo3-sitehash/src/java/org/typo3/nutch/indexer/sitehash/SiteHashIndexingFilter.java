@@ -33,8 +33,8 @@ import org.apache.nutch.indexer.IndexingException;
 import org.apache.nutch.indexer.IndexingFilter;
 import org.apache.nutch.indexer.NutchDocument;
 import org.apache.nutch.parse.Parse;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,7 +172,7 @@ public class SiteHashIndexingFilter implements IndexingFilter {
 			throws IndexingException {
 		try {
 			JsonNode rootNode = jsonMapper.readValue(stream, JsonNode.class);
-			String siteHash = rootNode.get("sitehash").getTextValue();
+			String siteHash = rootNode.get("sitehash").asText();
 
 			LOG.info("TYPO3 Solr siteHash retrieved: " + siteHash);
 
